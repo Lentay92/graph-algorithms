@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <set>
 
@@ -74,21 +74,21 @@ int main()
 		{ {S, 1} }
 	};
 
-	size_t vertexSum = 20; // число вершин
-	size_t iterCount = 0; // счётчик итераций
+	size_t vertexSum = 20; // vertices amount
+	size_t iterCount = 0;  // iterations counter
 
-	Vertex Start = A; // вершина, от которой прокладывается путь
-	Vertex Goal = T; // вершина, к которой прокладывается путь
-	Vertex Current; // вершина, рассматриваемая в момент итерации цикла
+	Vertex Start = A; // initial vertex
+	Vertex Goal = T;  // target vertex
+	Vertex Current;   // the vertex considered at the certain iteration
 
-	std::vector <bool> visited(vertexSum); // флаги, отмечающие была ли посещена вершина
-	std::vector <int> distance(vertexSum, INF); // расстояния от начальной вершины до n-нной вершины
-	std::vector <int> parents(vertexSum); // вектор номеров вершин, родительских по отношению к n-нной вершине
+	std::vector <bool> visited(vertexSum); 		// flags indicating whether vertex was visited
+	std::vector <int> distance(vertexSum, INF); 	// distances from initial vertex to the n-th vertex
+	std::vector <int> parents(vertexSum); 		// numbers of vertices parent to the n-th vertex
 	
 	distance[Start.num] = 0;
 	parents[Start.num] = -1;
 
-	std::multiset <Vertex> vertexQueue = { Start };
+	std::multiset <Vertex> vertexQueue = { Start }; // vertices to consider
 
 	while (!vertexQueue.empty())
 	{
