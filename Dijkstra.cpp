@@ -1,14 +1,13 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
-#include <queue>
 
 const int INF = 1000000000;
 
 int main()
 {
-	/* graph init */ 
+	/* graph init */
 
-	std::vector <std::vector<std::pair<int, int>>> graph = 
+	std::vector <std::vector<std::pair<int, int>>> graph =
 	{
 		{ {1, 1}, {5, 2} },
 		{ {0, 1}, {2, 1} },
@@ -32,52 +31,47 @@ int main()
 		{ {18, 1} }
 	};
 
-	int vertexSum = 20; // vertices amount
-	int iterCount = 0;  // iterations counter
+	int vertexSum = 20;	// vertices amount
+	int iterCount = 0;	// iterations counter
 
 	int start = 0;	// initial vertex
 	int goal = 19;	// target vertex
 	int current;	// the vertex considered at the certain iteration
 
 	std::vector <bool> visited(vertexSum);		// flags indicating whether vertex was visited
-	std::vector <int> distance(vertexSum, INF);  // distances from initial vertex to the n-th vertex
+	std::vector <int> distance(vertexSum, INF);	// distances from initial vertex to the n-th vertex
 	std::vector <int> parents(vertexSum);		// numbers of vertices parent to the n-th vertex
 
 	distance[start] = 0;
 	parents[start] = -1;
 
-	std::queue <int> vertexQueue; // vertices to consider
-
-	vertexQueue.push(start);
-
-	while (!vertexQueue.empty())
+	for (int i = 0; i < vertexSum; ++i)
 	{
-		current = vertexQueue.front();
-		vertexQueue.pop();
+		current = -1;
+
+		for (int j = 0; j < vertexSum; ++j)
+			if (!visited[j] && (current == -1 || distance[j] < distance[current]))
+				current = j;
+
+		if (distance[current] == INF || current == goal)
+			break;
 
 		visited[current] = true;
 
-		if (current == goal)
-			break;
-
-		for (int i = 0; i < graph[current].size(); ++i)
+		for (size_t j = 0; j < graph[current].size(); ++j)
 		{
-			int neighbor = graph[current][i].first;
-
-			int nextCost = graph[current][i].second;
-			int newCost = distance[current] + nextCost;
-
-			if ( !(visited[neighbor]) && newCost < distance[neighbor])
+			int neighbor = graph[current][j].first;
+			int	len = graph[current][j].second;
+			if (distance[current] + len < distance[neighbor])
 			{
-				distance[neighbor] = newCost;
-				vertexQueue.push(neighbor);
+				distance[neighbor] = distance[current] + len;
 				parents[neighbor] = current;
 			}
 		}
 		iterCount++;
 	}
 
-	std::vector<int> path;
+	std::vector <int> path;
 
 	for (int current = goal; current != -1; current = parents[current])
 		path.push_back(current);
@@ -85,10 +79,8 @@ int main()
 	reverse(path.begin(), path.end());
 
 	std::cout << "Path: ";
-
 	for (size_t i = 0; i < path.size(); ++i)
 		std::cout << path[i] << " ";
-
 	std::cout << "\nDistance: " << distance[goal];
 	std::cout << "\nIterations: " << iterCount;
 }
